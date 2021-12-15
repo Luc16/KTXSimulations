@@ -22,6 +22,7 @@ open class Ball(iniX: Float,
 ) {
     val direction = Vector2(cos(angle.toRad()), sin(angle.toRad()))
     val pos = Vector2(iniX, iniY)
+    private val prevPos = Vector2(pos)
     var x: Float
         get() = pos.x
         set(value) {pos.x = value}
@@ -31,28 +32,60 @@ open class Ball(iniX: Float,
     private val radius2 get() = radius*radius
 
     open fun move(valX: Float, valY: Float){
+        prevPos.set(pos)
         x += valX
         y += valY
     }
 
     private fun move(vec: Vector2){
+        prevPos.set(pos)
         x += vec.x
         y += vec.y
     }
 
-    fun moveTo(vec: Vector2){
+    private fun moveTo(vec: Vector2){
         move(vec.x - x, vec.y - y)
     }
 
+    private fun moveTo(valX: Float, valY: Float){
+        move(valX - x, valY - y)
+    }
+
     open fun update(delta: Float){
-        move(direction.x*speed/60, direction.y*speed/60) //???????????
-//        move(direction.x*speed*delta, direction.y*speed*delta)
+//        move(direction.x*speed/60, direction.y*speed/60) //???????????
+        move(direction.x*speed*delta, direction.y*speed*delta)
         speed -= deceleration*delta
         if (speed < 0) speed = 0f
     }
 
+    fun collideFixedBall(other: Ball, delta: Float){
+        val vec = Vector2(other.x - x, other.y - y)
+        val dot = vec.dot(direction)
+        val cpOnLine = Vector2(x + direction.x*dot, y + direction.y*dot)
+        val dotCPDir = direction.dot(cpOnLine)
+
+        val distToLine2 = dist2(other.pos, cpOnLine)
+        val distToCompare2 = when {
+            dotCPDir > direction.dot(pos) -> dist2(other.pos, pos)
+            dotCPDir < direction.dot(prevPos) -> dist2(other.pos, prevPos)
+            else -> distToLine2
+        }
+
+        val radiusSum2 = (radius + other.radius)*(radius + other.radius)
+        if (distToCompare2 <= radiusSum2){
+            val offset = sqrt(radiusSum2 - distToLine2) + 0.01f
+            moveTo(cpOnLine.x - direction.x*offset, cpOnLine.y - direction.y*offset)
+            val normal = Vector2(x - other.x, y - other.y).nor()
+            bounce(normal)
+        }
+    }
+
     fun collideBall(other: Ball){
-        if (dist2(pos, other.pos) <= (radius + other.radius)*(radius + other.radius)){
+        val vec = Vector2(other.x - x, other.y - y)
+        val dot = vec.dot(direction)
+        val closestPointOnLine = Vector2(x + direction.x*dot, y + direction.y*dot)
+
+        if (dist2(closestPointOnLine, other.pos) < (radius + other.radius)*(radius + other.radius)){
             val offset = radius + other.radius - sqrt(dist2(pos, other.pos))
             val normal = Vector2(x - other.x, y - other.y).nor()
 
@@ -187,8 +220,8 @@ open class Ball(iniX: Float,
                 val vecProjDir = Vector2(x + direction.x*dot, y + direction.y*dot)
 
                 val distToLine2 = dist2(vertex, vecProjDir)
-                if (distToLine2 > radius2) println("No collision should have happened," +
-                        " dist to line ${sqrt(distToLine2)} radius: $radius")
+                if (distToLine2 > radius2) throw Exception("No collision should have happened," +
+                        " dist to line: ${sqrt(distToLine2)}, radius: $radius")
                 offset = sqrt(radius2 - distToLine2)
                 newPos.set(vecProjDir.x - direction.x*offset, vecProjDir.y - direction.y*offset)
 

@@ -27,7 +27,7 @@ val fireColors = listOf(
 )
 
 class Fire(private val pos: Vector2){
-    val particles = mutableListOf<Particle>()
+    private val particles = mutableListOf<Particle>()
 
     fun update(delta: Float){
         val remove = mutableListOf<Particle>()
