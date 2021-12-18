@@ -19,7 +19,6 @@ import kotlin.random.Random.Default.nextFloat
 
 const val NUM_BALLS = 100
 
-
 class BallScreen(game: Simulations): CustomScreen(game) {
 
     private val screenRect = Rectangle(0f, 0f, WIDTH, HEIGHT)

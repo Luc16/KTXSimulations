@@ -22,7 +22,7 @@ class BallBallCollision(game: Simulations): CustomScreen(game) {
 
     override fun render(delta: Float) {
         ball.update(delta)
-        ball.collideFixedBall(centerBall, delta)
+        ball.collideFixedBall(centerBall)
         handleSwipe()
 
         viewport.apply()

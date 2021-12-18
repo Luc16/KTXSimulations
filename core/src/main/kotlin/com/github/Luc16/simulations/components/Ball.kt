@@ -10,12 +10,12 @@ import com.github.Luc16.simulations.utils.toRad
 import kotlin.math.*
 
 const val MAX_SPEED = 600f
-const val DECELERATION = 0f
+const val DECELERATION = 72f
 
 open class Ball(iniX: Float,
                 iniY: Float,
                 var radius: Float,
-                private var color: Color = Color.YELLOW,
+                var color: Color = Color.YELLOW,
                 angle: Float = 0f,
                 private val deceleration: Float = DECELERATION,
                 var speed: Float = MAX_SPEED
@@ -58,7 +58,7 @@ open class Ball(iniX: Float,
         if (speed < 0) speed = 0f
     }
 
-    fun collideFixedBall(other: Ball, delta: Float){
+    fun collideFixedBall(other: Ball): Boolean{
         val vec = Vector2(other.x - x, other.y - y)
         val dot = vec.dot(direction)
         val cpOnLine = Vector2(x + direction.x*dot, y + direction.y*dot)
@@ -77,7 +77,9 @@ open class Ball(iniX: Float,
             moveTo(cpOnLine.x - direction.x*offset, cpOnLine.y - direction.y*offset)
             val normal = Vector2(x - other.x, y - other.y).nor()
             bounce(normal)
+            return true
         }
+        return false
     }
 
     fun collideBall(other: Ball){
