@@ -10,7 +10,7 @@ import com.github.Luc16.simulations.utils.toRad
 import kotlin.math.*
 
 const val MAX_SPEED = 600f
-const val DECELERATION = 72f
+const val DECELERATION = 0f
 
 open class Ball(iniX: Float,
                 iniY: Float,
