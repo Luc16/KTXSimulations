@@ -39,8 +39,10 @@ class UniverseScreen(game: Simulations): CustomScreen(game) {
     override fun render(delta: Float) {
         handleInputs()
         player.update(delta)
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) player.speed = 0f
         offset.set(player.x - WIDTH/2, player.y - HEIGHT/2)
+
         viewport.apply()
         val startSectorX = (offset.x/(2*MAX_RADIUS)).toInt() - 1
         val startSectorY = (offset.y/(2*MAX_RADIUS)).toInt() - 1
@@ -77,7 +79,9 @@ class UniverseScreen(game: Simulations): CustomScreen(game) {
                                 color = Color.GRAY
                             )
                         stars[Pair(i, j)]?.let { star ->
-                            if (player.collideFixedBall(star)) star.color = Color.YELLOW
+                            if (player.collideFixedBall(star, delta)) {
+                                star.color = Color.YELLOW
+                            }
                             star.draw(renderer)
                         }
                     }
@@ -86,7 +90,6 @@ class UniverseScreen(game: Simulations): CustomScreen(game) {
             player.draw(renderer)
             drawMinimap(renderer)
         }
-
     }
 
     private fun handleInputs() {
@@ -134,10 +137,11 @@ class UniverseScreen(game: Simulations): CustomScreen(game) {
         renderer.color = Color.LIGHT_GRAY
         renderer.rect(startPoint.x, startPoint.y, 190f, 130f)
 
-        renderer.color = Color.RED
         for (i in 0..mapNumSectorsX){
             for (j in 0..mapNumSectorsY){
                 val rand = Random(createSeed(startSectorX + i,startSectorY + j))
+                renderer.color = Color.GRAY
+                stars[Pair(startSectorX + i,startSectorY + j)]?.let { star -> renderer.color = star.color }
                 if (rand.nextInt(0, 256) < 50){
                     renderer.circle(
                         startPoint.x + ((2*i + 3.4f)*MAX_RADIUS + ((startSectorX + 8)*2*MAX_RADIUS - startPoint.x + 5f))*ratio,

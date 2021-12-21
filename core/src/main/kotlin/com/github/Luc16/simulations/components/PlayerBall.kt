@@ -13,8 +13,8 @@ class PlayerBall(x: Float, y: Float, radius: Float,
         direction.setZero()
     }
 
-    override fun move(valX: Float, valY: Float) {
-        super.move(valX, valY)
-        camera.translate(valX, valY)
+    override fun update(delta: Float) {
+        camera.translate(nextPos.x - x, nextPos.y - y)
+        super.update(delta)
     }
 }

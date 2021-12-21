@@ -15,14 +15,14 @@ import kotlin.math.*
 class BallBallCollision(game: Simulations): CustomScreen(game) {
 
     private val angle = 270f
-    private val ball = Ball(-84f, 300f, 20f, angle = angle)
+    private val ball = Ball(-84f, 300f, 10f, angle = angle)
     private val centerBall = Ball(0f, -120f, 90f, color = Color.BLUE)
     private val prevPos = Vector2(ball.x, ball.y)
-    private var c = 0
 
     override fun render(delta: Float) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) game.setScreen<UniverseScreen>()
         ball.update(delta)
-        ball.collideFixedBall(centerBall)
+        ball.collideFixedBall(centerBall, delta)
         handleSwipe()
 
         viewport.apply()
