@@ -21,7 +21,7 @@ class Simulations: KtxGame<CustomScreen>() {
     val gameViewport = FitViewport(450f, 800f)
 
     override fun create() {
-        font.data.scale(2f)
+        font.data.scale(1f)
         addScreen(PrototypeScreen(this))
         addScreen(PollyRectBallCollision(this))
         addScreen(BallScreen(this))

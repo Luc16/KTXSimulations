@@ -74,9 +74,6 @@ class BallScreen(game: Simulations): CustomScreen(game) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) ||
             Gdx.input.isTouched(0) && Gdx.input.isTouched(1)) game.setScreen<PrototypeScreen>()
 
-        val touchPoint = Vector2(Gdx.input.x.toFloat(), Gdx.input.y.toFloat())
-        viewport.unproject(touchPoint)
-
         if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) camera.translate(y = 10f)
         if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) camera.translate(x = -10f)
         if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) camera.translate(y = -10f)

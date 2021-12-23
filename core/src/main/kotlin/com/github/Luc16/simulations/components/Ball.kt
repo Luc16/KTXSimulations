@@ -86,20 +86,17 @@ open class Ball(iniX: Float,
     }
 
     fun collideBall(other: Ball){
-        val vec = Vector2(other.x - x, other.y - y)
-        val dot = vec.dot(direction)
-        val closestPointOnLine = Vector2(x + direction.x*dot, y + direction.y*dot)
+        if (dist2(nextPos, other.nextPos) < (radius + other.radius)*(radius + other.radius)){
+            val offset = radius + other.radius - sqrt(dist2(nextPos, other.nextPos))
+            val normal = Vector2(nextPos.x - other.nextPos.x, nextPos.y - other.nextPos.y).nor()
 
-        if (dist2(closestPointOnLine, other.pos) < (radius + other.radius)*(radius + other.radius)){
-            val offset = radius + other.radius - sqrt(dist2(pos, other.pos))
-            val normal = Vector2(x - other.x, y - other.y).nor()
-
-            move(normal.x * offset/2, normal.y * offset/2)
+            nextPos.add(normal.x * offset/2, normal.y * offset/2)
             bounce(normal)
 
-            other.move(-normal.x * offset/2, -normal.y * offset/2)
+            other.nextPos.add(-normal.x * offset/2, -normal.y * offset/2)
             other.bounce(normal)
         }
+
     }
 
     fun collideWall(wall: PolygonRect){
@@ -181,20 +178,20 @@ open class Ball(iniX: Float,
 
     fun bounceOfWalls(screenRect: Rectangle){
         when {
-            x + radius >= screenRect.width -> {
-                move(screenRect.width - (radius + x), 0f)
+            nextPos.x + radius > screenRect.width -> {
+                nextPos.add(screenRect.width - (radius + nextPos.x) - 0.1f, 0f)
                 bounce(Vector2(-1f, 0f))
             }
-            x - radius <= 0 -> {
-                move(-x + radius, 0f)
+            nextPos.x - radius < 0 -> {
+                nextPos.add(-nextPos.x + radius + 0.1f, 0f)
                 bounce(Vector2(1f, 0f))
             }
-            y + radius >= screenRect.height -> {
-                move(0f, screenRect.height - radius - y)
+            nextPos.y + radius > screenRect.height -> {
+                nextPos.add(0f, screenRect.height - radius - nextPos.y - 0.1f)
                 bounce(Vector2(0f, -1f))
             }
-            y - radius <= 0 -> {
-                move(0f, -y + radius)
+            nextPos.y - radius < 0 -> {
+                nextPos.add(0f, -nextPos.y + radius + 0.1f)
                 bounce(Vector2(0f, 1f))
             }
         }
