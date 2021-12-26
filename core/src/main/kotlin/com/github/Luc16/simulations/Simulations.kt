@@ -27,8 +27,9 @@ class Simulations: KtxGame<CustomScreen>() {
         addScreen(BallScreen(this))
         addScreen(ParticleScreen(this))
         addScreen(BallBallCollision(this))
+        addScreen(DynamicBallBallCollision(this))
         addScreen(UniverseScreen(this))
-        setScreen<UniverseScreen>()
+        setScreen<DynamicBallBallCollision>()
     }
 
     override fun dispose() {

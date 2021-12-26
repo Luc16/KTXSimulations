@@ -11,7 +11,6 @@ import com.github.Luc16.simulations.Simulations
 import com.github.Luc16.simulations.WIDTH
 import com.github.Luc16.simulations.components.Ball
 import com.github.Luc16.simulations.components.PlayerBall
-import com.github.Luc16.simulations.utils.translate
 import ktx.graphics.moveTo
 import ktx.graphics.use
 import kotlin.random.Random
@@ -25,9 +24,9 @@ const val MAX_BC_STAR_RADIUS = 3f
 class UniverseScreen(game: Simulations): CustomScreen(game) {
     private val camera = viewport.camera
     private val offset = Vector2()
-    private val player = PlayerBall(WIDTH/2, HEIGHT/2, 10f, camera, Color.RED)
+    private val player = PlayerBall(0f, 0f, 10f, camera, Color.RED)
     private var prevPos = Vector2().setZero()
-    private val stars = mutableMapOf<Pair<Int, Int>, Ball>()
+    private var stars = mutableMapOf<Pair<Int, Int>, Ball>()
 
     private val numSectorsX = (WIDTH/(2*MAX_RADIUS)).toInt() + 2
     private val numSectorsY = (HEIGHT/(2*MAX_RADIUS)).toInt() + 2
@@ -40,11 +39,12 @@ class UniverseScreen(game: Simulations): CustomScreen(game) {
     override fun show() {
         val file = Gdx.files.local("assets/seed.txt")
         seedOffset = (file.readString().toInt() + 1)%100_000_000
-        camera.moveTo(Vector2(WIDTH/2, HEIGHT/2))
         file.writeString("$seedOffset", false)
+
+        seedOffset = 7 // Tirar dps
     }
 
-    private fun createSeed(i: Int, j: Int): Int = i and 0xFFFF shl 16 or (j and 0xFFFF) + 7//seedOffset
+    private fun createSeed(i: Int, j: Int): Int = i and 0xFFFF shl 16 or (j and 0xFFFF) + seedOffset
 
     private fun forEachStarSectorIn(rangeI: IntRange, rangeJ: IntRange, func: (Int, Int) -> Unit) {
         for (i in rangeI){
@@ -152,8 +152,12 @@ class UniverseScreen(game: Simulations): CustomScreen(game) {
                     )
                 stars[Pair(i, j)]?.let { star ->
                     if (player.collideFixedBall(star, delta)) {
-                        score += 100
+                        if (star.color == Color.YELLOW) {
+                            reset()
+                            return@forEachStarSectorIn
+                        }
                         star.color = Color.YELLOW
+                        score += 100
                     }
                     star.draw(renderer)
                 }
@@ -169,5 +173,16 @@ class UniverseScreen(game: Simulations): CustomScreen(game) {
             player.draw(renderer)
             drawMinimap(renderer)
         }
+    }
+
+    private fun reset(){
+        score = 0
+        seedOffset++
+        offset.set(-WIDTH/2, -HEIGHT/2)
+        stars = mutableMapOf()
+        player.nextPos.setZero()
+        player.pos.setZero()
+        camera.moveTo(Vector2().setZero())
+        player.direction.setZero()
     }
 }

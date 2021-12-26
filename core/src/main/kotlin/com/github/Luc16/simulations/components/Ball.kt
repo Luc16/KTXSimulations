@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.github.Luc16.simulations.utils.bhaskara
 import com.github.Luc16.simulations.utils.dist2
 import com.github.Luc16.simulations.utils.ortho
 import com.github.Luc16.simulations.utils.toRad
@@ -45,7 +46,7 @@ open class Ball(iniX: Float,
         move(vec.x - x, vec.y - y)
     }
 
-    private fun moveTo(valX: Float, valY: Float){
+    fun moveTo(valX: Float, valY: Float){
         move(valX - x, valY - y)
     }
 
@@ -56,7 +57,7 @@ open class Ball(iniX: Float,
         if (speed < 0) speed = 0f
     }
 
-    open fun collideFixedBall(other: Ball, delta: Float): Boolean{
+    fun collideFixedBall(other: Ball, delta: Float): Boolean {
         val vec = Vector2(other.x - nextPos.x, other.y - nextPos.y)
         val dot = vec.dot(direction)
         val cpOnLine = Vector2(nextPos.x + direction.x*dot, nextPos.y + direction.y*dot)
@@ -80,6 +81,30 @@ open class Ball(iniX: Float,
                 cpOnLine.x - prevDir.x*offset + direction.x*movementCorrection,
                 cpOnLine.y - prevDir.y*offset + direction.y*movementCorrection
             )
+            return true
+        }
+        return false
+    }
+
+    fun collideMovingBall(other: Ball, delta: Float): Boolean{
+        val rSum = radius + other.radius
+        val dx = direction.x*speed*delta - other.direction.x*other.speed*delta
+        val dy = direction.y*speed*delta - other.direction.y*other.speed*delta
+        val ddx = x - other.x
+        val ddy = y - other.y
+
+        val (t1, t2) = bhaskara(dx*dx + dy*dy, 2*(ddx*dx + ddy*dy), ddx*ddx + ddy*ddy - rSum*rSum)
+        if (t1 == null || t2 == null) return false
+
+        val tf = if (t1 in 0f..1f) t1 else t2
+
+        if (tf in 0f..1f){
+            val backMov = (tf - 1)*speed*delta
+            nextPos.add(direction.x*backMov, direction.y*backMov)
+            val otherBackMov = (tf - 1)*other.speed*delta
+            other.nextPos.add(other.direction.x*otherBackMov, other.direction.y*otherBackMov)
+            speed = 0f
+            other.speed = 0f
             return true
         }
         return false
