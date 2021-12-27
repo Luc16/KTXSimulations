@@ -10,7 +10,7 @@ class Particle(x: Float,
                speed: Float = MAX_SPEED/3,
                deceleration: Float = DECELERATION/2,
                private val gravity: Float
-): Ball(x, y, radius, color, angle, deceleration,  speed) {
+): DynamicBall(x, y, radius, color, angle, deceleration,  speed) {
 
     override fun update(delta: Float) {
         super.update(delta)

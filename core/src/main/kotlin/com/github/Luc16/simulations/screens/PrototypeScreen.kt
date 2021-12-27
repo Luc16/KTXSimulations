@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.github.Luc16.simulations.Simulations
-import com.github.Luc16.simulations.components.Ball
+import com.github.Luc16.simulations.components.DynamicBall
 import com.github.Luc16.simulations.components.PlayerBall
 import com.github.Luc16.simulations.components.PolygonRect
 import com.github.Luc16.simulations.utils.dist2
@@ -19,9 +19,9 @@ import kotlin.random.Random
 const val CLICK_MARGIN = 100f
 const val N_BALLS = 0
 
-fun createBallList(size: Int, screenRect: Rectangle, walls: List<PolygonRect>): List<Ball> {
+fun createBallList(size: Int, screenRect: Rectangle, walls: List<PolygonRect>): List<DynamicBall> {
     return List(size){
-        var b = Ball(
+        var b = DynamicBall(
             (screenRect.width - 10f) * Random.nextFloat(),
             (screenRect.height - 10f) * Random.nextFloat(),
             10f,
@@ -30,7 +30,7 @@ fun createBallList(size: Int, screenRect: Rectangle, walls: List<PolygonRect>): 
         )
         var col = true
         while (col) {
-            b = Ball(
+            b = DynamicBall(
                 (screenRect.width - 10f) * Random.nextFloat(),
                 (screenRect.height - 10f) * Random.nextFloat(),
                 10f,

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.github.Luc16.simulations.Simulations
-import com.github.Luc16.simulations.components.Ball
+import com.github.Luc16.simulations.components.DynamicBall
 import com.github.Luc16.simulations.components.PolygonRect
 import com.github.Luc16.simulations.utils.toRad
 import ktx.graphics.use
@@ -15,7 +15,7 @@ import kotlin.math.*
 class PollyRectBallCollision(game: Simulations): CustomScreen(game) {
 
     private val angle = 270f
-    private val ball = Ball(-84f, 300f, 20f, angle = angle, speed = 600f)
+    private val ball = DynamicBall(-84f, 300f, 20f, angle = angle, maxSpeed = 600f)
     private val wall = PolygonRect(-80f, -120f, 90f, 80f, Color.BLUE)
     private val prevPos = Vector2(ball.x, ball.y)
     private var normal = Vector2()

@@ -7,7 +7,7 @@ import com.github.Luc16.simulations.utils.translate
 class PlayerBall(x: Float, y: Float, radius: Float,
                  private val camera: Camera,
                  color: Color = Color.YELLOW):
-    Ball(x, y, radius, color) {
+    DynamicBall(x, y, radius, color) {
 
     init {
         direction.setZero()

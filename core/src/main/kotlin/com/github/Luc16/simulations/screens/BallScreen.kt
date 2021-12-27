@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector3
 import com.github.Luc16.simulations.Simulations
 import com.github.Luc16.simulations.HEIGHT
 import com.github.Luc16.simulations.WIDTH
-import com.github.Luc16.simulations.components.Ball
+import com.github.Luc16.simulations.components.DynamicBall
 import com.github.Luc16.simulations.utils.randomColor
 import com.github.Luc16.simulations.utils.translate
 import ktx.graphics.moveTo
@@ -24,7 +24,7 @@ class BallScreen(game: Simulations): CustomScreen(game) {
     private val screenRect = Rectangle(0f, 0f, WIDTH, HEIGHT)
     private val camera = viewport.camera
     private val balls = List(NUM_BALLS){
-        Ball(
+        DynamicBall(
             WIDTH * nextFloat(),
             HEIGHT * nextFloat(),
             10f,

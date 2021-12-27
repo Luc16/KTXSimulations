@@ -16,17 +16,12 @@ import ktx.graphics.moveTo
 import ktx.graphics.use
 import kotlin.random.Random
 
-
-const val MAX_RADIUS = 500f
-const val MIN_RADIUS = 50f
-
-const val MAX_BC_STAR_RADIUS = 3f
-
-class UniverseScreen(game: Simulations): CustomScreen(game) {
+class EnemyScreen(game: Simulations): CustomScreen(game) {
     private val camera = viewport.camera
     private val offset = Vector2()
     private val player = PlayerBall(0f, 0f, 10f, camera, Color.RED)
     private var prevPos = Vector2().setZero()
+    private val enemy = DynamicBall( 100f, 100f, 15f, Color.BLUE, maxSpeed = 500f)
     private var stars = mutableMapOf<Pair<Int, Int>, DynamicBall>()
 
     private val numSectorsX = (WIDTH/(2*MAX_RADIUS)).toInt() + 2
@@ -58,6 +53,10 @@ class UniverseScreen(game: Simulations): CustomScreen(game) {
     override fun render(delta: Float) {
         handleInputs()
         player.update(delta)
+        enemy.direction.set(player.x - enemy.x, player.y - enemy.y).nor()
+        enemy.update(delta)
+        if (dist2(enemy.pos, player.pos) <= 150*150) enemy.speed = 0f
+        else enemy.speed = enemy.maxSpeed
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) player.speed = 0f
         offset.set(player.x - WIDTH/2, player.y - HEIGHT/2)
@@ -160,6 +159,7 @@ class UniverseScreen(game: Simulations): CustomScreen(game) {
                         star.color = Color.YELLOW
                         score += 100
                     }
+                    if (enemy.collideFixedBall(star, delta)) println("Collided")
                     star.draw(renderer)
                 }
             }
@@ -172,6 +172,7 @@ class UniverseScreen(game: Simulations): CustomScreen(game) {
             drawBackgroundStars(renderer)
             handleEntities(renderer, delta)
             player.draw(renderer)
+            enemy.draw(renderer)
             drawMinimap(renderer)
         }
     }

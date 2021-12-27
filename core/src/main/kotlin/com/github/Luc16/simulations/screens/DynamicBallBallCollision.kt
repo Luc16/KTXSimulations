@@ -6,17 +6,14 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Vector2
 import com.github.Luc16.simulations.Simulations
-import com.github.Luc16.simulations.components.Ball
-import com.github.Luc16.simulations.components.PolygonRect
-import com.github.Luc16.simulations.utils.toRad
+import com.github.Luc16.simulations.components.DynamicBall
 import ktx.graphics.use
-import kotlin.math.*
 
 class DynamicBallBallCollision(game: Simulations): CustomScreen(game) {
 
     private val angle = 270f
-    private val ball = Ball(-84f, 300f, 10f, angle = angle)
-    private val centerBall = Ball(0f, -120f, 90f, color = Color.BLUE, speed = 300f)
+    private val ball = DynamicBall(-84f, 300f, 10f, angle = angle)
+    private val centerBall = DynamicBall(0f, -120f, 90f, color = Color.BLUE, maxSpeed = 300f)
     private val prevPos = Vector2(ball.x, ball.y)
 
     override fun render(delta: Float) {

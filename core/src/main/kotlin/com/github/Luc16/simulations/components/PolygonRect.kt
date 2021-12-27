@@ -93,7 +93,7 @@ class PolygonRect( x: Float, y: Float, width: Float, height: Float, val color: C
         return point
     }
 
-    fun collideBallSAT(ball: Ball): Triple<Boolean, Float, Vector2> {
+    fun collideBallSAT(ball: DynamicBall): Triple<Boolean, Float, Vector2> {
         var depth = Float.MAX_VALUE
         val normal = Vector2()
 
@@ -148,7 +148,7 @@ class PolygonRect( x: Float, y: Float, width: Float, height: Float, val color: C
         return Triple(true, depth, normal)
     }
 
-    fun collideBall(ball: Ball): Triple<Boolean, Float, Vector2> {
+    fun collideBall(ball: DynamicBall): Triple<Boolean, Float, Vector2> {
         var depth = Float.MAX_VALUE
         val normal = Vector2()
         val colDir = collisionDirection(ball.direction)
