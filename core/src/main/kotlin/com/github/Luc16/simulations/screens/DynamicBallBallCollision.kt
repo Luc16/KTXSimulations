@@ -18,8 +18,9 @@ class DynamicBallBallCollision(game: Simulations): CustomScreen(game) {
 
     override fun render(delta: Float) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            centerBall.move(-centerBall.x-225, 0f)
+            centerBall.moveTo(-225f, -120f)
             centerBall.speed = 800f
+            centerBall.direction.set(1f, 0f)
         }
         ball.update(delta)
         centerBall.update(delta)
