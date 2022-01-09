@@ -56,7 +56,7 @@ class BallScreen(game: Simulations): CustomScreen(game) {
             ball.update(delta)
             ball.bounceOfWalls(screenRect)
             for(j in i + 1 until balls.size){
-                ball.collideBall(balls[j])
+                ball.collideMovingBall(balls[j], delta)
             }
         }
 

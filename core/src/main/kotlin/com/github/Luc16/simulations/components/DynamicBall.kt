@@ -10,7 +10,7 @@ import com.github.Luc16.simulations.utils.ortho
 import com.github.Luc16.simulations.utils.toRad
 import kotlin.math.*
 
-const val MAX_SPEED = 600f
+const val MAX_SPEED = 200f
 const val DECELERATION = 0f
 
 open class DynamicBall(iniX: Float,
@@ -96,15 +96,24 @@ open class DynamicBall(iniX: Float,
             val normal = Vector2(nextPos.x - other.nextPos.x, nextPos.y - other.nextPos.y).nor()
             val extraMov = tf - 1
             val backMov = extraMov*speed*delta
+
             nextPos.add(direction.x*backMov, direction.y*backMov)
+            var scalar = if (normal.dot(direction) > 0) -1f else 1f
             bounce(normal)
+            direction.scl(scalar)
+//            println("dot: ${normal.dot(direction)}")
             nextPos.add(backMov*direction.x, backMov*direction.y)
 
             val otherBackMov = extraMov*other.speed*delta
             other.nextPos.add(other.direction.x*otherBackMov, other.direction.y*otherBackMov)
+            scalar = if (normal.dot(other.direction) < 0) -1f else 1f
             other.bounce(normal)
+//            println("other dot: ${normal.dot(direction)}")
+            other.direction.scl(scalar)
             other.nextPos.add(otherBackMov*direction.x, otherBackMov*direction.y)
 
+//            speed = 0f
+//            other.speed = 0f
             return true
         }
         return false

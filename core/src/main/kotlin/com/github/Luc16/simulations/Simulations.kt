@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.utils.viewport.FitViewport
+import com.github.Luc16.simulations.components.Ball
 import com.github.Luc16.simulations.screens.*
 //import com.github.Luc16.bouncyball.screens.PrototypeScreen
 import ktx.app.KtxGame
@@ -30,7 +31,7 @@ class Simulations: KtxGame<CustomScreen>() {
         addScreen(DynamicBallBallCollision(this))
         addScreen(UniverseScreen(this))
         addScreen(EnemyScreen(this))
-        setScreen<DynamicBallBallCollision>()
+        setScreen<BallScreen>()
     }
 
     override fun dispose() {

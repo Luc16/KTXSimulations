@@ -11,7 +11,7 @@ import ktx.graphics.use
 
 class DynamicBallBallCollision(game: Simulations): CustomScreen(game) {
 
-    private val angle = 270f
+    private val angle = 250f
     private val ball = DynamicBall(-84f, 300f, 10f, angle = angle)
     private val centerBall = DynamicBall(0f, -120f, 90f, color = Color.BLUE, maxSpeed = 300f)
     private val prevPos = Vector2(ball.x, ball.y)
@@ -19,8 +19,8 @@ class DynamicBallBallCollision(game: Simulations): CustomScreen(game) {
     override fun render(delta: Float) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             centerBall.moveTo(-225f, -120f)
-            centerBall.speed = 800f
-            centerBall.direction.set(1f, 0f)
+            centerBall.speed = 300f
+            centerBall.direction.set(9f, 1f).nor()
         }
         ball.update(delta)
         centerBall.update(delta)
@@ -31,7 +31,13 @@ class DynamicBallBallCollision(game: Simulations): CustomScreen(game) {
         renderer.use(ShapeRenderer.ShapeType.Line, viewport.camera.combined){
             ball.draw(renderer)
             centerBall.draw(renderer)
-
+            renderer.line(ball.pos, centerBall.pos)
+            renderer.color = Color.RED
+            renderer.line(centerBall.x, centerBall.y, centerBall.x + centerBall.direction.x*100f, centerBall.y + centerBall.direction.y*100f)
+//            renderer.color = Color.YELLOW
+//            renderer.line(centerBall.x, centerBall.y, centerBall.x + 100f, centerBall.y)
+            renderer.color = Color.GRAY
+            renderer.line(ball.x, ball.y, ball.x + ball.direction.x*100f, ball.y + ball.direction.y*100f)
         }
 
     }
